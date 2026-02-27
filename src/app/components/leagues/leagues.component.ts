@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { League } from '../../models/football.models';
+import { League } from '@app/models/football.models';
 
 interface LeagueGroup {
   title: string;

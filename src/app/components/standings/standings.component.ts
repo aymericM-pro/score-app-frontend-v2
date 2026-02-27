@@ -1,8 +1,8 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { FootballService } from '../../services/football.service';
-import { Standing } from '../../models/football.models';
+import { FootballService } from '@app/services/football.service';
+import { Standing } from '@app/models/football.models';
 
 type StandingType = 'overall' | 'home' | 'away';
 

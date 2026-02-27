@@ -2,9 +2,9 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FootballService } from '../../services/football.service';
-import { Team, PlayerStats, Match, Standing } from '../../models/football.models';
-import { HeaderComponent } from '../header/header.component';
+import { FootballService } from '@app/services/football.service';
+import { Team, PlayerStats, Match, Standing } from '@app/models/football.models';
+import { HeaderComponent } from '@app/components/header/header.component';
 
 type TabType = 'overview' | 'matches' | 'players';
 

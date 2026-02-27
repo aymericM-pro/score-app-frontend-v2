@@ -1,9 +1,9 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { FootballService } from '../../services/football.service';
-import { PlayerStats } from '../../models/football.models';
-import { HeaderComponent } from '../header/header.component';
+import { FootballService } from '@app/services/football.service';
+import { PlayerStats } from '@app/models/football.models';
+import { HeaderComponent } from '@app/components/header/header.component';
 
 type StatType = 'goals' | 'assists' | 'cards';
 

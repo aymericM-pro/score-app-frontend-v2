@@ -3,22 +3,19 @@
     <h2 class="section-title">{{ 'calendar.title' | translate }}</h2>
 
     <div class="flex items-center space-x-3">
-      <button
-        (click)="previousMatchday()"
+      <app-button
+        variant="secondary"
         [disabled]="selectedMatchday() === matchdays()[0]"
-        [class.opacity-30]="selectedMatchday() === matchdays()[0]"
-        [class.cursor-not-allowed]="selectedMatchday() === matchdays()[0]"
-        class="btn-secondary">
+        (clicked)="previousMatchday()">
         ←
-      </button>
+      </app-button>
 
       <div class="relative">
-        <button
-          (click)="toggleDropdown()"
-          class="btn-primary flex items-center space-x-2">
-          <span>{{ 'calendar.matchday' | translate }} {{ selectedMatchday() }}</span>
-          <span class="text-xs">▼</span>
-        </button>
+        <app-button
+          variant="primary"
+          (clicked)="toggleDropdown()">
+          {{ 'calendar.matchday' | translate }} {{ selectedMatchday() }} ▼
+        </app-button>
 
         @if (showDropdown()) {
           <div class="dropdown-menu">
@@ -35,14 +32,12 @@
         }
       </div>
 
-      <button
-        (click)="nextMatchday()"
+      <app-button
+        variant="secondary"
         [disabled]="selectedMatchday() === matchdays()[matchdays().length - 1]"
-        [class.opacity-30]="selectedMatchday() === matchdays()[matchdays().length - 1]"
-        [class.cursor-not-allowed]="selectedMatchday() === matchdays()[matchdays().length - 1]"
-        class="btn-secondary">
+        (clicked)="nextMatchday()">
         →
-      </button>
+      </app-button>
     </div>
   </div>
 

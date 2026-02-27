@@ -24,18 +24,16 @@
       </div>
 
       <div class="flex items-center space-x-2">
-        <button
-          (click)="setLanguage('fr')"
-          [class.btn-lang-active]="languageService.currentLanguage() === 'fr'"
-          class="btn-lang">
-          FR
-        </button>
-        <button
-          (click)="setLanguage('en')"
-          [class.btn-lang-active]="languageService.currentLanguage() === 'en'"
-          class="btn-lang">
-          EN
-        </button>
+        <app-button
+          variant="lang"
+          label="FR"
+          [active]="languageService.currentLanguage() === 'fr'"
+          (clicked)="setLanguage('fr')" />
+        <app-button
+          variant="lang"
+          label="EN"
+          [active]="languageService.currentLanguage() === 'en'"
+          (clicked)="setLanguage('en')" />
       </div>
     </div>
   </div>

@@ -2,10 +2,10 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { HeaderComponent } from '../header/header.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { StandingsComponent } from '../standings/standings.component';
-import { CalendarComponent } from '../calendar/calendar.component';
+import { HeaderComponent } from '@app/components/header/header.component';
+import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
+import { StandingsComponent } from '@app/components/standings/standings.component';
+import { CalendarComponent } from '@app/components/calendar/calendar.component';
 
 @Component({
   selector: 'app-league-detail',

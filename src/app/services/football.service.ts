@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Team, Match, Standing, Player, PlayerStats } from '../models/football.models';
+import { Team, Match, Standing, Player, PlayerStats } from '@app/models/football.models';
 
 @Injectable({
   providedIn: 'root'

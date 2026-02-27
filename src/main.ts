@@ -5,12 +5,12 @@ import { provideRouter, RouterOutlet } from '@angular/router';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { importProvidersFrom } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { LeaguesComponent } from './app/components/leagues/leagues.component';
-import { LeagueDetailComponent } from './app/components/league-detail/league-detail.component';
-import { PlayersComponent } from './app/components/players/players.component';
-import { TeamsComponent } from './app/components/teams/teams.component';
-import { TeamDetailComponent } from './app/components/team-detail/team-detail.component';
-import { translations } from './app/i18n/translations';
+import { LeaguesComponent } from '@app/components/leagues/leagues.component';
+import { LeagueDetailComponent } from '@app/components/league-detail/league-detail.component';
+import { PlayersComponent } from '@app/components/players/players.component';
+import { TeamsComponent } from '@app/components/teams/teams.component';
+import { TeamDetailComponent } from '@app/components/team-detail/team-detail.component';
+import { translations } from '@app/i18n/translations';
 
 @Injectable()
 export class CustomTranslateLoader implements TranslateLoader {

@@ -1,8 +1,9 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { FootballService } from '../../services/football.service';
-import { Match } from '../../models/football.models';
+import { FootballService } from '@app/services/football.service';
+import { Match } from '@app/models/football.models';
+import { ButtonComponent } from '@app/components/desing-system/button/fsButton.component';
 
 interface MatchGroup {
   date: string;
@@ -14,7 +15,7 @@ interface MatchGroup {
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, ButtonComponent],
   templateUrl: './calendar.component.html',
 })
 export class CalendarComponent implements OnInit {
