@@ -1,0 +1,265 @@
+<app-header></app-header>
+<div class="bg-[#1a1a1a] min-h-screen">
+  @if (team()) {
+    <div class="page-hero py-12">
+      <div class="container mx-auto px-6">
+        <a [routerLink]="['/teams', leagueId()]" class="inline-flex items-center text-white hover:text-gray-200 transition mb-6">
+          <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+          </svg>
+          Retour aux équipes
+        </a>
+        <div class="flex items-center space-x-6">
+          <div class="w-32 h-32 rounded-full bg-white flex items-center justify-center text-6xl shadow-2xl">
+            {{ team()!.logo }}
+          </div>
+          <div>
+            <h1 class="text-5xl font-bold text-white mb-2">{{ team()!.name }}</h1>
+            <p class="text-2xl text-white/90">{{ team()!.shortName }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-8">
+      <div class="flex gap-2 mb-8 border-b border-[#3a3a3a]">
+        <button
+          (click)="setActiveTab('overview')"
+          [class.tab-active]="activeTab() === 'overview'"
+          [class.tab-inactive]="activeTab() !== 'overview'"
+          class="tab-btn">
+          Vue d'ensemble
+        </button>
+        <button
+          (click)="setActiveTab('matches')"
+          [class.tab-active]="activeTab() === 'matches'"
+          [class.tab-inactive]="activeTab() !== 'matches'"
+          class="tab-btn">
+          Matchs de l'année
+        </button>
+        <button
+          (click)="setActiveTab('players')"
+          [class.tab-active]="activeTab() === 'players'"
+          [class.tab-inactive]="activeTab() !== 'players'"
+          class="tab-btn">
+          Joueurs
+        </button>
+      </div>
+
+      @if (activeTab() === 'overview') {
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          @if (standing()) {
+            <div class="card p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="card-title">Classement</h3>
+                <div class="w-12 h-12 rounded-full bg-[#00d9ff] flex items-center justify-center text-2xl font-bold text-black">
+                  {{ standing()!.position }}
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <div class="text-3xl font-bold text-accent">{{ standing()!.points }}</div>
+                  <div class="text-sm text-muted mt-1">Points</div>
+                </div>
+                <div>
+                  <div class="text-3xl font-bold text-green-500">{{ standing()!.won }}</div>
+                  <div class="text-sm text-muted mt-1">Victoires</div>
+                </div>
+                <div>
+                  <div class="text-3xl font-bold text-white">{{ standing()!.played }}</div>
+                  <div class="text-sm text-muted mt-1">Matchs</div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <div class="card p-6">
+            <h3 class="card-title mb-4">Statistiques de buts</h3>
+            <div class="grid grid-cols-2 gap-6 text-center">
+              <div>
+                <div class="text-4xl font-bold text-green-500 mb-2">{{ standing()?.goalsFor || 0 }}</div>
+                <div class="text-sm text-muted">Buts marqués</div>
+              </div>
+              <div>
+                <div class="text-4xl font-bold text-red-500 mb-2">{{ standing()?.goalsAgainst || 0 }}</div>
+                <div class="text-sm text-muted">Buts encaissés</div>
+              </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-[#3a3a3a] text-center">
+              <div class="text-3xl font-bold mb-2"
+                [class.text-green-500]="(standing()?.goalDifference || 0) > 0"
+                [class.text-red-500]="(standing()?.goalDifference || 0) < 0"
+                [class.text-muted]="(standing()?.goalDifference || 0) === 0">
+                {{ (standing()?.goalDifference || 0) > 0 ? '+' : '' }}{{ standing()?.goalDifference || 0 }}
+              </div>
+              <div class="text-sm text-muted">Différence de buts</div>
+            </div>
+          </div>
+
+          <div class="card p-6">
+            <h3 class="card-title mb-4">Forme de l'équipe</h3>
+            <div class="grid grid-cols-3 gap-4 text-center mb-6">
+              <div>
+                <div class="text-3xl font-bold text-yellow-500">{{ standing()?.drawn || 0 }}</div>
+                <div class="text-sm text-muted mt-1">Nuls</div>
+              </div>
+              <div>
+                <div class="text-3xl font-bold text-red-500">{{ standing()?.lost || 0 }}</div>
+                <div class="text-sm text-muted mt-1">Défaites</div>
+              </div>
+              <div>
+                <div class="text-3xl font-bold text-accent">{{ calculateWinRate() }}%</div>
+                <div class="text-sm text-muted mt-1">Taux victoires</div>
+              </div>
+            </div>
+            @if (standing()?.home && standing()?.away) {
+              <div class="pt-4 border-t border-[#3a3a3a]">
+                <div class="grid grid-cols-2 gap-4 text-center text-sm">
+                  <div>
+                    <div class="text-xl font-bold text-accent mb-1">{{ standing()!.home!.points }}</div>
+                    <div class="text-xs text-muted">Points domicile</div>
+                  </div>
+                  <div>
+                    <div class="text-xl font-bold text-accent mb-1">{{ standing()!.away!.points }}</div>
+                    <div class="text-xs text-muted">Points extérieur</div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (activeTab() === 'matches') {
+        <div class="space-y-8">
+          @for (group of matchesByCompetition(); track group.competition) {
+            <div>
+              <h3 class="section-title mb-4 flex items-center">
+                <span class="text-3xl mr-3">🏆</span>
+                {{ group.competition }}
+              </h3>
+              <div class="space-y-3">
+                @for (match of group.matches; track match.id) {
+                  <div class="card-hover p-6">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-6 flex-1">
+                        <div class="flex items-center gap-4 flex-1">
+                          <span class="text-4xl">{{ match.homeTeam.logo }}</span>
+                          <div class="flex-1">
+                            <div class="text-xl font-bold text-white" [class.text-accent]="match.homeTeam.id === team()!.id">
+                              {{ match.homeTeam.name }}
+                            </div>
+                            <div class="text-sm text-muted">{{ match.homeTeam.shortName }}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="px-8 text-center">
+                        @if (match.status === 'finished') {
+                          <div class="text-4xl font-bold text-white">
+                            {{ match.homeScore }} - {{ match.awayScore }}
+                          </div>
+                          <div class="mt-2">
+                            <span class="badge-result"
+                              [class.badge-win]="getMatchResult(match) === 'V'"
+                              [class.badge-draw]="getMatchResult(match) === 'N'"
+                              [class.badge-loss]="getMatchResult(match) === 'D'">
+                              {{ getMatchResult(match) === 'V' ? 'Victoire' : getMatchResult(match) === 'N' ? 'Match nul' : 'Défaite' }}
+                            </span>
+                          </div>
+                        } @else if (match.status === 'live') {
+                          <div class="text-xl font-bold text-white mb-1">
+                            {{ match.homeScore }} - {{ match.awayScore }}
+                          </div>
+                          <div class="text-xs px-3 py-1 rounded-full bg-red-500 text-white inline-block">EN DIRECT</div>
+                        } @else {
+                          <div class="text-lg text-muted mb-1">{{ match.date }}</div>
+                          <div class="text-sm text-accent">{{ match.time }}</div>
+                        }
+                      </div>
+
+                      <div class="flex items-center gap-6 flex-1 justify-end">
+                        <div class="flex items-center gap-4 flex-1 justify-end">
+                          <div class="flex-1 text-right">
+                            <div class="text-xl font-bold text-white" [class.text-accent]="match.awayTeam.id === team()!.id">
+                              {{ match.awayTeam.name }}
+                            </div>
+                            <div class="text-sm text-muted">{{ match.awayTeam.shortName }}</div>
+                          </div>
+                          <span class="text-4xl">{{ match.awayTeam.logo }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (activeTab() === 'players') {
+        <div class="space-y-3">
+          @for (playerStat of allPlayers(); track playerStat.player.id; let i = $index) {
+            <div class="card-hover p-6">
+              <div class="flex items-center justify-between gap-6">
+                <div class="flex items-center gap-6 flex-1 min-w-0">
+                  <div class="w-16 h-16 rounded-full bg-[#3a3a3a] flex items-center justify-center text-2xl font-bold text-white shrink-0">
+                    {{ i + 1 }}
+                  </div>
+
+                  <div class="flex items-center gap-4 flex-1 min-w-0">
+                    <div class="relative shrink-0">
+                      <div class="page-hero w-20 h-20 rounded-xl flex items-center justify-center shadow-lg">
+                        <span class="text-3xl font-bold text-white">{{ playerStat.player.name.charAt(0) }}</span>
+                      </div>
+                      <div class="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-black border-3 border-[#00d9ff] flex items-center justify-center shadow-lg">
+                        <span class="text-sm font-bold text-white">{{ playerStat.player.number }}</span>
+                      </div>
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-2xl font-bold text-white mb-1 truncate">{{ playerStat.player.name }}</h3>
+                      <div class="flex items-center gap-3 text-muted">
+                        <span class="font-medium">{{ playerStat.player.position }}</span>
+                        <span>•</span>
+                        <span>{{ playerStat.player.nationality }}</span>
+                        <span>•</span>
+                        <span>{{ playerStat.player.age }} ans</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-8">
+                  <div class="grid grid-cols-5 gap-6 text-center">
+                    <div>
+                      <div class="text-2xl font-bold text-white mb-1">{{ playerStat.goals }}</div>
+                      <div class="text-xs text-muted">Buts</div>
+                    </div>
+                    <div>
+                      <div class="text-2xl font-bold text-white mb-1">{{ playerStat.assists }}</div>
+                      <div class="text-xs text-muted">Passes</div>
+                    </div>
+                    <div>
+                      <div class="text-2xl font-bold text-white mb-1">{{ playerStat.appearances }}</div>
+                      <div class="text-xs text-muted">Matchs</div>
+                    </div>
+                    <div>
+                      <div class="text-2xl font-bold text-yellow-500 mb-1">{{ playerStat.yellowCards }}</div>
+                      <div class="text-xs text-muted">Jaunes</div>
+                    </div>
+                    <div>
+                      <div class="text-2xl font-bold text-red-600 mb-1">{{ playerStat.redCards }}</div>
+                      <div class="text-xs text-muted">Rouges</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

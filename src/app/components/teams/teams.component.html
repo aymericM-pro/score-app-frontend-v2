@@ -1,0 +1,41 @@
+<app-header></app-header>
+<div class="page">
+  <div class="mb-8">
+    <a routerLink="/league/ligue-1" class="back-link mb-4">
+      <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+      </svg>
+      Retour au championnat
+    </a>
+    <h1 class="page-title mb-2">Équipes - {{ leagueName() }}</h1>
+    <p class="text-muted">{{ teams().length }} équipes</p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    @for (team of teams(); track team.id) {
+      <a
+        [routerLink]="['/team', leagueId(), team.id]"
+        class="card-interactive p-6 group">
+        <div class="flex flex-col items-center text-center space-y-4">
+          <div class="page-hero w-24 h-24 rounded-full flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
+            {{ team.logo }}
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-white group-hover:text-accent transition">
+              {{ team.name }}
+            </h3>
+            <p class="text-muted text-sm mt-1">{{ team.shortName }}</p>
+          </div>
+          <div class="pt-4 border-t border-[#3a3a3a] w-full">
+            <div class="flex items-center justify-center text-sm text-accent font-medium">
+              Voir les détails
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+    }
+  </div>
+</div>

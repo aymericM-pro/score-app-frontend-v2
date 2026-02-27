@@ -1,0 +1,91 @@
+<div class="page">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="section-title">{{ 'standings.title' | translate }}</h2>
+
+    <div class="flex gap-2">
+      <button
+        (click)="setStandingType('overall')"
+        [class.btn-filter-active]="standingType() === 'overall'"
+        [class.btn-filter-inactive]="standingType() !== 'overall'"
+        class="btn-filter">
+        Complet
+      </button>
+      <button
+        (click)="setStandingType('home')"
+        [class.btn-filter-active]="standingType() === 'home'"
+        [class.btn-filter-inactive]="standingType() !== 'home'"
+        class="btn-filter">
+        Domicile
+      </button>
+      <button
+        (click)="setStandingType('away')"
+        [class.btn-filter-active]="standingType() === 'away'"
+        [class.btn-filter-inactive]="standingType() !== 'away'"
+        class="btn-filter">
+        Extérieur
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="table-header-row grid grid-cols-[50px_1fr_repeat(8,60px)] gap-2">
+      <div class="text-center">#</div>
+      <div>{{ 'standings.team' | translate }}</div>
+      <div class="text-center">{{ 'standings.played' | translate }}</div>
+      <div class="text-center">{{ 'standings.won' | translate }}</div>
+      <div class="text-center">{{ 'standings.drawn' | translate }}</div>
+      <div class="text-center">{{ 'standings.lost' | translate }}</div>
+      <div class="text-center">{{ 'standings.gf' | translate }}</div>
+      <div class="text-center">{{ 'standings.ga' | translate }}</div>
+      <div class="text-center">{{ 'standings.gd' | translate }}</div>
+      <div class="text-center font-bold">{{ 'standings.points' | translate }}</div>
+    </div>
+
+    @for (standing of displayedStandings(); track standing.team.id) {
+      <div
+        [class.bg-[#00d9ff]/10]="standing.position <= 3"
+        [class.bg-[#ff6b00]/10]="standing.position >= displayedStandings().length - 2"
+        class="table-body-row grid grid-cols-[50px_1fr_repeat(8,60px)] gap-2">
+
+        <div class="text-center flex items-center justify-center">
+          <span
+            [class.text-accent]="standing.position <= 3"
+            [class.text-[#ff6b00]]="standing.position >= displayedStandings().length - 2"
+            class="font-bold text-white">
+            {{ standing.position }}
+          </span>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <span class="text-lg">{{ standing.team.logo }}</span>
+          <span class="text-white font-medium truncate">{{ standing.team.name }}</span>
+        </div>
+
+        <div class="text-center text-muted flex items-center justify-center">{{ standing.played }}</div>
+        <div class="text-center text-muted flex items-center justify-center">{{ standing.won }}</div>
+        <div class="text-center text-muted flex items-center justify-center">{{ standing.drawn }}</div>
+        <div class="text-center text-muted flex items-center justify-center">{{ standing.lost }}</div>
+        <div class="text-center text-muted flex items-center justify-center">{{ standing.goalsFor }}</div>
+        <div class="text-center text-muted flex items-center justify-center">{{ standing.goalsAgainst }}</div>
+        <div
+          [class.text-green-500]="standing.goalDifference > 0"
+          [class.text-red-500]="standing.goalDifference < 0"
+          class="text-center flex items-center justify-center font-medium">
+          {{ standing.goalDifference > 0 ? '+' : '' }}{{ standing.goalDifference }}
+        </div>
+        <div class="text-center text-white font-bold flex items-center justify-center">{{ standing.points }}</div>
+      </div>
+    }
+  </div>
+
+  <div class="mt-6 flex items-center space-x-6 text-xs text-muted">
+    <div class="flex items-center space-x-2">
+      <div class="w-3 h-3 bg-[#00d9ff]/20 border border-[#00d9ff]"></div>
+      <span>{{ 'standings.champions_league' | translate }}</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="w-3 h-3 bg-[#ff6b00]/20 border border-[#ff6b00]"></div>
+      <span>{{ 'standings.relegation' | translate }}</span>
+    </div>
+  </div>
+</div>

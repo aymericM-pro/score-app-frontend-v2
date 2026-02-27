@@ -1,0 +1,61 @@
+<app-header></app-header>
+<div class="bg-[#1a1a1a] min-h-screen">
+  <div class="page-hero py-16">
+    <div class="container mx-auto px-6">
+      <h1 class="page-title mb-4">Statistiques des Joueurs</h1>
+      <p class="text-xl text-white/90">Découvrez les meilleurs joueurs de la saison</p>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-6 py-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      @for (playerStat of displayedStats(); track playerStat.player.id) {
+        <div class="card-interactive overflow-hidden">
+          <div class="relative">
+            <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-lg">
+              <span class="text-lg font-bold text-white">{{ playerStat.player.number }}</span>
+            </div>
+
+            <div class="flex items-center justify-center py-12 bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a]">
+              <div class="page-hero w-32 h-32 rounded-2xl flex items-center justify-center shadow-xl">
+                <span class="text-5xl font-bold text-white">{{ getInitials(playerStat.player.name) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-white mb-1 text-center truncate">{{ playerStat.player.name }}</h3>
+            <p class="text-sm text-accent text-center mb-3 font-medium">{{ playerStat.player.position }}</p>
+
+            <div class="space-y-2 pt-3 border-t border-[#3a3a3a]">
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-muted">Buts</span>
+                <span class="text-sm font-bold text-white">{{ playerStat.goals }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-muted">Passes D.</span>
+                <span class="text-sm font-bold text-white">{{ playerStat.assists }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-muted">Matchs</span>
+                <span class="text-sm font-bold text-white">{{ playerStat.appearances }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-muted">Minutes</span>
+                <span class="text-sm font-bold text-white">{{ playerStat.minutesPlayed }}'</span>
+              </div>
+            </div>
+
+            <div class="mt-3 pt-3 border-t border-[#3a3a3a] flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">{{ playerStat.player.team.logo }}</span>
+                <span class="text-xs text-muted">{{ playerStat.player.team.shortName }}</span>
+              </div>
+              <span class="text-xs text-muted">{{ playerStat.player.nationality }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

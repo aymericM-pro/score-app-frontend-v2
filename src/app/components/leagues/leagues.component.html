@@ -1,0 +1,50 @@
+<div class="page">
+  <div class="mb-8">
+    <h1 class="page-title mb-2">{{ 'leagues.title' | translate }}</h1>
+    <p class="text-muted">{{ 'leagues.subtitle' | translate }}</p>
+  </div>
+
+  <div class="space-y-8">
+    @for (group of leagueGroups(); track group.title) {
+      <div>
+        <button
+          (click)="toggleGroup(group)"
+          class="w-full mb-4 flex items-center justify-between group">
+          <h2 class="section-title group-hover:text-accent transition">{{ group.title }}</h2>
+          <svg
+            class="w-6 h-6 fill-[#b0b0b0] group-hover:fill-[#00d9ff] transition-all duration-300"
+            [class.rotate-180]="!group.collapsed"
+            viewBox="0 0 24 24">
+            <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+          </svg>
+        </button>
+
+        @if (!group.collapsed) {
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            @for (league of group.leagues; track league.id) {
+              <a
+                [routerLink]="['/league', league.id]"
+                class="card-interactive p-5 group">
+                <div class="flex flex-col items-center text-center space-y-3">
+                  <div
+                    class="w-16 h-16 rounded-full flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform"
+                    [style.background]="league.color">
+                    <svg class="w-9 h-9 fill-white" viewBox="0 0 24 24">
+                      <path d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M17,13.5V17C17,17.55 16.55,18 16,18H13.5C13.5,16.62 12.88,15.41 11.89,14.66C12.07,14.55 12.23,14.4 12.41,14.29C13.85,13.29 15.63,12.88 17,13.5M15,11A2,2 0 0,1 13,9A2,2 0 0,1 15,7A2,2 0 0,1 17,9A2,2 0 0,1 15,11M7,13.5C8.37,12.88 10.15,13.29 11.59,14.29C11.77,14.4 11.93,14.55 12.11,14.66C11.12,15.41 10.5,16.62 10.5,18H8C7.45,18 7,17.55 7,17V13.5M9,11A2,2 0 0,1 7,9A2,2 0 0,1 9,7A2,2 0 0,1 11,9A2,2 0 0,1 9,11Z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white group-hover:text-accent transition">
+                      {{ league.name }}
+                    </h3>
+                    <p class="text-muted text-sm mt-1">{{ league.country }}</p>
+                  </div>
+                </div>
+              </a>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
