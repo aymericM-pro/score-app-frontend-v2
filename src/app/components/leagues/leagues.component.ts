@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@app/pipes/translate.pipe';
 import { League } from '@app/models/football.models';
 
 interface LeagueGroup {
@@ -13,7 +13,7 @@ interface LeagueGroup {
 @Component({
   selector: 'app-leagues',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslatePipe],
   templateUrl: './leagues.component.html',
 })
 export class LeaguesComponent {

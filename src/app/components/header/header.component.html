@@ -1,40 +1,42 @@
-<header class="bg-[#1a1a1a] text-white shadow-lg border-b border-[#3a3a3a]">
-  <div class="container mx-auto px-4 py-4">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center space-x-8">
-        <a routerLink="/" class="flex items-center space-x-3">
-          <div class="text-2xl font-bold text-accent">FOTMOB</div>
+<header class="bg-neutral-900 text-white border-b border-neutral-800">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex h-16 items-center justify-between">
+      
+      <!-- Logo -->
+      <a routerLink="/" class="flex items-center gap-2">
+        <span class="text-xl font-semibold tracking-wide text-accent">
+          FOTMOB
+        </span>
+      </a>
+
+      <!-- Navigation Desktop -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a
+          routerLink="/"
+          routerLinkActive="text-accent"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="text-neutral-300 hover:text-white transition-colors">
+          Championnats
         </a>
 
-        <nav class="hidden md:flex items-center space-x-1">
-          <a
-            routerLink="/"
-            routerLinkActive="btn-nav-active"
-            [routerLinkActiveOptions]="{exact: true}"
-            class="btn-nav">
-            Championnats
-          </a>
-          <a
-            routerLink="/players"
-            routerLinkActive="btn-nav-active"
-            class="btn-nav">
-            Joueurs
-          </a>
-        </nav>
+        <a
+          routerLink="/players"
+          routerLinkActive="text-accent"
+          class="text-neutral-300 hover:text-white transition-colors">
+          Joueurs
+        </a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2">
+        <app-dropdown
+          variant="ghost"
+          [items]="langItems()"
+          [selected]="selectedLangItem()"
+          (selectedChange)="changeLang($event)">
+        </app-dropdown>
       </div>
 
-      <div class="flex items-center space-x-2">
-        <app-button
-          variant="lang"
-          label="FR"
-          [active]="languageService.currentLanguage() === 'fr'"
-          (clicked)="setLanguage('fr')" />
-        <app-button
-          variant="lang"
-          label="EN"
-          [active]="languageService.currentLanguage() === 'en'"
-          (clicked)="setLanguage('en')" />
-      </div>
     </div>
   </div>
 </header>

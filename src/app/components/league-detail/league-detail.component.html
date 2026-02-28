@@ -1,15 +1,1 @@
-<div class="min-h-screen bg-[#1a1a1a]">
-  <app-header />
-
-  <div class="flex">
-    <app-sidebar [(activeView)]="activeView" [leagueId]="leagueId()" />
-
-    <main class="flex-1">
-      @if (activeView() === 'standings') {
-        <app-standings />
-      } @else if (activeView() === 'calendar') {
-        <app-calendar />
-      }
-    </main>
-  </div>
-</div>
+<router-outlet />

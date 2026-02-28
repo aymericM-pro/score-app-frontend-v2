@@ -1,45 +1,43 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
 import { FootballService } from '@app/services/football.service';
 import { PlayerStats } from '@app/models/football.models';
-import { HeaderComponent } from '@app/components/header/header.component';
 
 type StatType = 'goals' | 'assists' | 'cards';
 
 @Component({
-  selector: 'app-players',
-  standalone: true,
-  imports: [CommonModule, TranslateModule, HeaderComponent],
-  templateUrl: './players.component.html',
+    selector: 'app-players',
+    standalone: true,
+    imports: [CommonModule],
+    templateUrl: './players.component.html',
 })
 export class PlayersComponent implements OnInit {
-  playerStats = signal<PlayerStats[]>([]);
-  statType = signal<StatType>('goals');
-  displayedStats = signal<PlayerStats[]>([]);
+    playerStats = signal<PlayerStats[]>([]);
+    statType = signal<StatType>('goals');
+    displayedStats = signal<PlayerStats[]>([]);
 
-  constructor(private footballService: FootballService) {}
+    constructor(private footballService: FootballService) {}
 
-  ngOnInit() {
-    const stats = this.footballService.getPlayerStats();
-    this.playerStats.set(stats);
-    this.updateDisplayedStats();
-  }
+    ngOnInit() {
+        const stats = this.footballService.getPlayerStats();
+        this.playerStats.set(stats);
+        this.updateDisplayedStats();
+    }
 
-  setStatType(type: StatType) {
-    this.statType.set(type);
-    this.updateDisplayedStats();
-  }
+    setStatType(type: StatType) {
+        this.statType.set(type);
+        this.updateDisplayedStats();
+    }
 
-  getInitials(name: string): string {
-    const parts = name.split(' ');
-    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
-  }
+    getInitials(name: string): string {
+        const parts = name.split(' ');
+        if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+        return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+    }
 
-  private updateDisplayedStats() {
-    const stats = [...this.playerStats()];
-    stats.sort((a, b) => b.goals - a.goals);
-    this.displayedStats.set(stats);
-  }
+    private updateDisplayedStats() {
+        const stats = [...this.playerStats()];
+        stats.sort((a, b) => b.goals - a.goals);
+        this.displayedStats.set(stats);
+    }
 }

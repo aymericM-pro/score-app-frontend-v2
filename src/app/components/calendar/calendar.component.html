@@ -1,95 +1,102 @@
 <div class="page">
-  <div class="mb-6 flex items-center justify-between">
-    <h2 class="section-title">{{ 'calendar.title' | translate }}</h2>
+    <div class="mb-6 flex items-center justify-between">
+        <h2 class="section-title">{{ 'calendar.title' | translate }}</h2>
 
-    <div class="flex items-center space-x-3">
-      <app-button
-        variant="secondary"
-        [disabled]="selectedMatchday() === matchdays()[0]"
-        (clicked)="previousMatchday()">
-        ←
-      </app-button>
+        <div class="flex items-center space-x-3">
+            <app-button
+                variant="secondary"
+                size="sm"
+                [disabled]="selectedMatchday() === matchdays()[0]"
+                (clicked)="previousMatchday()"
+            >
+                <i class="mdi mdi-chevron-left text-base"></i>
+            </app-button>
 
-      <div class="relative">
-        <app-button
-          variant="primary"
-          (clicked)="toggleDropdown()">
-          {{ 'calendar.matchday' | translate }} {{ selectedMatchday() }} ▼
-        </app-button>
+            <app-dropdown
+                variant="primary"
+                [items]="matchdayItems()"
+                [selected]="selectedMatchdayItem()"
+                (selectedChange)="selectMatchday($event)"
+            />
 
-        @if (showDropdown()) {
-          <div class="dropdown-menu">
-            @for (day of matchdays(); track day) {
-              <button
-                (click)="selectMatchdayAndClose(day)"
-                [class.bg-[#00d9ff]]="selectedMatchday() === day"
-                [class.text-black]="selectedMatchday() === day"
-                class="dropdown-item">
-                {{ 'calendar.matchday' | translate }} {{ day }}
-              </button>
-            }
-          </div>
-        }
-      </div>
-
-      <app-button
-        variant="secondary"
-        [disabled]="selectedMatchday() === matchdays()[matchdays().length - 1]"
-        (clicked)="nextMatchday()">
-        →
-      </app-button>
+            <app-button
+                variant="secondary"
+                size="sm"
+                [disabled]="selectedMatchday() === matchdays()[matchdays().length - 1]"
+                (clicked)="nextMatchday()"
+            >
+                <i class="mdi mdi-chevron-right text-base"></i>
+            </app-button>
+        </div>
     </div>
-  </div>
 
-  <div class="space-y-6">
-    @for (group of groupedMatches(); track group.date) {
-      <div>
-        <div class="match-date-header">
-          <h3 class="text-white font-semibold">{{ group.dayName }} {{ group.fullDate }}</h3>
-        </div>
-
-        <div class="space-y-1">
-          @for (match of group.matches; track match.id) {
-            <div class="match-row">
-              <div class="flex items-center">
-                <div class="w-12 text-center mr-4">
-                  @if (match.status === 'finished') {
-                    <span class="badge-ft">FT</span>
-                  } @else {
-                    <span class="text-xs text-muted">{{ match.time }}</span>
-                  }
+    <div class="space-y-6">
+        @for (group of groupedMatches(); track group.date) {
+            <div>
+                <div class="match-date-header">
+                    <h3 class="text-white font-semibold">
+                        {{ group.dayName }} {{ group.fullDate }}
+                    </h3>
                 </div>
 
-                <div class="flex-1 flex items-center justify-between">
-                  <div class="flex items-center space-x-3 flex-1">
-                    <span class="text-2xl">{{ match.homeTeam.logo }}</span>
-                    <span class="text-white font-medium">{{ match.homeTeam.shortName }}</span>
-                  </div>
+                <div class="space-y-1">
+                    @for (match of group.matches; track match.id) {
+                        <div class="match-row">
+                            <div class="flex items-center">
+                                <div class="w-12 text-center mr-4">
+                                    @if (match.status === 'finished') {
+                                        <span class="badge-ft">FT</span>
+                                    } @else {
+                                        <span class="text-xs text-muted">{{ match.time }}</span>
+                                    }
+                                </div>
 
-                  <div class="px-8">
-                    @if (match.status === 'finished' && match.homeScore !== undefined && match.awayScore !== undefined) {
-                      <div class="flex items-center space-x-3">
-                        <span class="text-xl font-bold text-white w-8 text-right">{{ match.homeScore }}</span>
-                        <span class="text-muted">-</span>
-                        <span class="text-xl font-bold text-white w-8 text-left">{{ match.awayScore }}</span>
-                      </div>
-                    } @else if (match.status === 'live') {
-                      <span class="badge-live">LIVE</span>
-                    } @else {
-                      <span class="text-sm text-muted">{{ match.time }}</span>
+                                <div class="flex-1 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3 flex-1">
+                                        <span class="text-2xl">{{ match.homeTeam.logo }}</span>
+                                        <span class="text-white font-medium">
+                                            {{ match.homeTeam.shortName }}
+                                        </span>
+                                    </div>
+
+                                    <div class="px-8">
+                                        @if (
+                                            match.status === 'finished' &&
+                                            match.homeScore !== undefined &&
+                                            match.awayScore !== undefined
+                                        ) {
+                                            <div class="flex items-center space-x-3">
+                                                <span
+                                                    class="text-xl font-bold text-white w-8 text-right"
+                                                >
+                                                    {{ match.homeScore }}
+                                                </span>
+                                                <span class="text-muted">-</span>
+                                                <span
+                                                    class="text-xl font-bold text-white w-8 text-left"
+                                                >
+                                                    {{ match.awayScore }}
+                                                </span>
+                                            </div>
+                                        } @else if (match.status === 'live') {
+                                            <span class="badge-live">LIVE</span>
+                                        } @else {
+                                            <span class="text-sm text-muted">{{ match.time }}</span>
+                                        }
+                                    </div>
+
+                                    <div class="flex items-center space-x-3 flex-1 justify-end">
+                                        <span class="text-white font-medium">
+                                            {{ match.awayTeam.shortName }}
+                                        </span>
+                                        <span class="text-2xl">{{ match.awayTeam.logo }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
-                  </div>
-
-                  <div class="flex items-center space-x-3 flex-1 justify-end">
-                    <span class="text-white font-medium">{{ match.awayTeam.shortName }}</span>
-                    <span class="text-2xl">{{ match.awayTeam.logo }}</span>
-                  </div>
                 </div>
-              </div>
             </div>
-          }
-        </div>
-      </div>
-    }
-  </div>
+        }
+    </div>
 </div>

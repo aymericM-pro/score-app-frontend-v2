@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@app/pipes/translate.pipe';
 import { FootballService } from '@app/services/football.service';
 import { Standing } from '@app/models/football.models';
 
@@ -9,7 +9,7 @@ type StandingType = 'overall' | 'home' | 'away';
 @Component({
   selector: 'app-standings',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './standings.component.html',
 })
 export class StandingsComponent implements OnInit {

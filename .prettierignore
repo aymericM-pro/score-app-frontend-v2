@@ -1,0 +1,25 @@
+# Node
+node_modules
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build
+dist
+.angular
+.vite
+coverage
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# IDE
+.vscode
+.idea
+
+# Generated
+*.generated.ts

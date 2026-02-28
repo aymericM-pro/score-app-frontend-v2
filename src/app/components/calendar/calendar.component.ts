@@ -1,9 +1,12 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@app/pipes/translate.pipe';
+import { DateTime } from 'luxon';
 import { FootballService } from '@app/services/football.service';
+import { LanguageService } from '@app/services/language.service';
 import { Match } from '@app/models/football.models';
 import { ButtonComponent } from '@app/components/desing-system/button/fsButton.component';
+import { DropdownComponent, DropdownItem } from '@app/components/desing-system/dropdown/fsDropdown.component';
 
 interface MatchGroup {
   date: string;
@@ -15,21 +18,34 @@ interface MatchGroup {
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, TranslateModule, ButtonComponent],
+  imports: [CommonModule, TranslatePipe, ButtonComponent, DropdownComponent],
   templateUrl: './calendar.component.html',
 })
 export class CalendarComponent implements OnInit {
+  private footballService = inject(FootballService);
+  private languageService = inject(LanguageService);
+
   matches = signal<Match[]>([]);
   matchdays = signal<number[]>([]);
   selectedMatchday = signal<number>(1);
   filteredMatches = signal<Match[]>([]);
   groupedMatches = signal<MatchGroup[]>([]);
-  showDropdown = signal<boolean>(false);
 
-  constructor(
-    private footballService: FootballService,
-    private translate: TranslateService
-  ) {}
+  matchdayItems = computed<DropdownItem[]>(() =>
+    this.matchdays().map(d => ({ value: d, label: `Journée ${d}` }))
+  );
+
+  selectedMatchdayItem = computed<DropdownItem | null>(() => {
+    const day = this.selectedMatchday();
+    return day != null ? { value: day, label: `Journée ${day}` } : null;
+  });
+
+  constructor() {
+    effect(() => {
+      const _lang = this.languageService.currentLanguage();
+      this.groupMatchesByDate(this.filteredMatches());
+    });
+  }
 
   ngOnInit() {
     const allMatches = this.footballService.getMatches();
@@ -39,13 +55,15 @@ export class CalendarComponent implements OnInit {
     this.matchdays.set(uniqueMatchdays);
 
     if (uniqueMatchdays.length > 0) {
-      this.selectMatchday(uniqueMatchdays[0]);
+      const d = uniqueMatchdays[0];
+      this.selectMatchday({ value: d, label: `Journée ${d}` });
     }
   }
 
-  selectMatchday(matchday: number) {
-    this.selectedMatchday.set(matchday);
-    const filtered = this.footballService.getMatchesByMatchday(matchday);
+  selectMatchday(item: DropdownItem) {
+    const day = Number(item.value);
+    this.selectedMatchday.set(day);
+    const filtered = this.footballService.getMatchesByMatchday(day);
     this.filteredMatches.set(filtered);
     this.groupMatchesByDate(filtered);
   }
@@ -60,13 +78,14 @@ export class CalendarComponent implements OnInit {
       groups.get(match.date)!.push(match);
     });
 
+    const locale = this.languageService.currentLanguage();
+
     const groupedArray: MatchGroup[] = Array.from(groups.entries()).map(([date, matchList]) => {
-      const dayName = this.getDayName(date);
-      const fullDate = this.getFormattedDate(date);
+      const dt = DateTime.fromISO(date).setLocale(locale);
       return {
         date,
-        dayName,
-        fullDate,
+        dayName: dt.toFormat('cccc'),
+        fullDate: dt.toFormat('d MMMM'),
         matches: matchList.sort((a, b) => a.time.localeCompare(b.time))
       };
     });
@@ -77,40 +96,16 @@ export class CalendarComponent implements OnInit {
   nextMatchday() {
     const currentIndex = this.matchdays().indexOf(this.selectedMatchday());
     if (currentIndex < this.matchdays().length - 1) {
-      this.selectMatchday(this.matchdays()[currentIndex + 1]);
+      const d = this.matchdays()[currentIndex + 1];
+      this.selectMatchday({ value: d, label: `Journée ${d}` });
     }
   }
 
   previousMatchday() {
     const currentIndex = this.matchdays().indexOf(this.selectedMatchday());
     if (currentIndex > 0) {
-      this.selectMatchday(this.matchdays()[currentIndex - 1]);
+      const d = this.matchdays()[currentIndex - 1];
+      this.selectMatchday({ value: d, label: `Journée ${d}` });
     }
-  }
-
-  toggleDropdown() {
-    this.showDropdown.set(!this.showDropdown());
-  }
-
-  selectMatchdayAndClose(matchday: number) {
-    this.selectMatchday(matchday);
-    this.showDropdown.set(false);
-  }
-
-  getDayName(dateString: string): string {
-    const date = new Date(dateString);
-    const days = this.translate.currentLang === 'fr'
-      ? ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
-      : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days[date.getDay()];
-  }
-
-  getFormattedDate(dateString: string): string {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const months = this.translate.currentLang === 'fr'
-      ? ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
-      : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return `${day} ${months[date.getMonth()]}`;
   }
 }
